@@ -10,10 +10,24 @@ import {
   TextInput,
   Button,
   KeyboardAvoidingView,
-  AsyncStorage} from 'react-native';
+  AsyncStorage,
+  TouchableOpacity} from 'react-native';
+
 
 const STATUSBAR_HEIGHT = Platform.OS == 'ios' ? 20 : StatusBar.currentHeight;
 const TODO = "@todoapp.todo";
+
+const TodoItem = props => {
+  let textStyle = style.TodoItem
+  if (props.done) {
+    textStyle = style.TodoItemDone
+  }
+  return(
+    <TouchableOpacity onPress={props.onTapTodoItem}>
+      <Text style={textStyle}>{props.title}</Text>
+    </TouchableOpacity>
+  )
+}
 
 export default class App extends React.Component {
   constructor(props){
@@ -30,18 +44,14 @@ export default class App extends React.Component {
     this.loadTodo();
   }
 
-  // loadTodo = async() =>{
-  //   try{
-  //     const todoString = await AsyncStorage.getItem(TODO);
-  //     if(todoString){
-  //       const todo = JSON.parse(todoString);
-  //       const currentIndex = todo.length;
-  //       this.setState({todo: todo, currentIndex: currentIndex});
-  //     }
-  //   }catch(e){
-  //     console.log(e);
-  //   }
-  // }
+  onTapTodoItem = todoItem => {
+    const todo = this.state.todo
+    const id = todo.indexOf(todoItem)
+    todoItem.done = !todoItem.done
+    todo[id] = todoItem
+    this.setState({todo:todo})
+    this.saveTodo(todo)
+  }
 
   loadTodo = () => {
     AsyncStorage.getItem(TODO).then(todoString => {
@@ -90,8 +100,15 @@ export default class App extends React.Component {
         <ScrollView style={style.todolist}>
           <Text>ここにTODOリストが表示されます</Text>
           <FlatList
+            extraData={this.state}
             data={this.state.todo}
-            renderItem={({item}) => <Text>{item.title}</Text>}
+            renderItem={({item}) =>
+              <TodoItem
+                title={item.title}
+                done={item.done}
+                onTapTodoItem={() => this.onTapTodoItem(item)}
+              />
+            }
             keyExtractor={(item) => "todo_" + item.id}
           />
         </ScrollView>
@@ -124,6 +141,12 @@ const style = StyleSheet.create({
   },
   todolist: {
     flex: 1
+  },
+  todoItem: {
+    backgroundColor: "white"
+  },
+  TodoItemDone: {
+    backgroundColor: "red"
   },
   input:{
     height: 30,
