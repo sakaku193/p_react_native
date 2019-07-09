@@ -1,19 +1,77 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet,
+  Text,
+  View,
+  Platform,
+  StatusBar} from 'react-native';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-    </View>
-  );
+const { STATUSBAR_HIGHT } = Platform.OS == "ios" ? 20 : StatusBar.currentHeight;
+
+export default class App extends React.Component {
+  render(){
+    return(
+      <View style={styles.container}>
+        {/* 結果表示領域 */}
+        <View style={styles.results}>
+          <View style={styles.resultLine}></View>
+          <View style={styles.resultLine}></View>
+          <View style={styles.resultLine}></View>
+        </View>
+        {/* ボタン表示領域 */}
+        <View style={styles.buttons}>
+          <View style={styles.buttonsLine}></View>
+          <View style={styles.buttonsLine}></View>
+          <View style={styles.buttonsLine}></View>
+          <View style={styles.lastButtonsLinesContainer}>
+            <View style={styles.twoButtonsLines}>
+              <View style={styles.buttonsLine}></View>
+              <View style={styles.buttonsLine}></View>
+            </View>
+            <View style={styles.enterButtonContainer}></View>
+          </View>
+        </View>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
+  results: {
+    flex: 3,
+    backgroundColor: '#fff'
+  },
+  resultLine: {
+    flex: 1,
+    borderBottomWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'flex-end'
+  },
+  buttons: {
+    flex: 5
+  },
+  buttonsLine: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    borderWidth: 1,
+  },
+  lastButtonsLinesContainer: {
+    flex: 2,
+    flexDirection: 'row'
+  },
+  twoButtonsLines: {
+    flex: 3
+  },
+  enterButtonContainer: {
+    flex: 1,
+    alignItems: 'center',
+    borderWidth: 1
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+    paddingTop: STATUSBAR_HIGHT
+  }
 });
