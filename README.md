@@ -1,1 +1,1 @@
-p_react_native
+自習用リポジトリ
