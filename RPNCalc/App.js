@@ -24,7 +24,42 @@ const CalcButton = props => {
   )
 }
 
+const CalcButtons = props => {
+  return(
+    <React.Fragment>
+      { props.buttons.map( button => {
+        return (
+          <CalcButton
+            key={button.label}
+            flex={button.flex}
+            label={button.label}
+            btnEvent={button.btnEvent}
+          />
+        )
+      })}
+    </React.Fragment>
+  )
+}
+
 export default class App extends React.Component {
+
+  buttons = [
+    [
+      {
+        label: "AC",
+        flex: 2,
+        btnEvent: () => {this.acButton()}
+      },
+      {
+        label: "C",
+        btnEvent: () => {this.cButton()}
+      },
+      {
+        label: "+",
+        b0c4de: () => {this.calcButton("+")}
+      }
+    ]
+  ]
 
   valueButton = value => {
 
@@ -54,9 +89,7 @@ export default class App extends React.Component {
         {/* ボタン表示領域 */}
         <View style={styles.buttons}>
           <View style={styles.buttonsLine}>
-            <CalcButton flex={2} label={"AC"} btnEvent={() => this.acButton()} />
-            <CalcButton label={"C"} btnEvent={() => this.cButton()} />
-            <CalcButton label={"+"} btnEvent={() => this.calcButton("+")} />
+            <CalcButtons buttons={this.buttons[0]} />
           </View>
           <View style={styles.buttonsLine}></View>
           <View style={styles.buttonsLine}></View>
