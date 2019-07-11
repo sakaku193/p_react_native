@@ -58,6 +58,76 @@ export default class App extends React.Component {
         label: "+",
         b0c4de: () => {this.calcButton("+")}
       }
+    ],
+    [
+      {
+        label: "7",
+        btnEvent: () => {this.calcButton("7")}
+      },
+      {
+        label: "8",
+        b0c4de: () => {this.calcButton("8")}
+      },
+      {
+        label: "9",
+        b0c4de: () => {this.calcButton("9")}
+      },
+      {
+        label: "-",
+        b0c4de: () => {this.calcButton("-")}
+      }
+    ],
+    [
+      {
+        label: "4",
+        btnEvent: () => {this.calcButton("4")}
+      },
+      {
+        label: "5",
+        b0c4de: () => {this.calcButton("5")}
+      },
+      {
+        label: "6",
+        b0c4de: () => {this.calcButton("6")}
+      },
+      {
+        label: "*",
+        b0c4de: () => {this.calcButton("*")}
+      }
+    ],
+    [
+      {
+        label: "1",
+        btnEvent: () => {this.calcButton("1")}
+      },
+      {
+        label: "2",
+        b0c4de: () => {this.calcButton("2")}
+      },
+      {
+        label: "3",
+        b0c4de: () => {this.calcButton("3")}
+      }
+    ],
+    [
+      {
+        label: "0",
+        btnEvent: () => {this.calcButton("0")}
+      },
+      {
+        label: ".",
+        b0c4de: () => {this.calcButton(".")}
+      },
+      {
+        label: "/",
+        b0c4de: () => {this.calcButton("/")}
+      }
+    ],
+    [
+      {
+        label: "Enter",
+        btnEvent: () => {this.enterButton()}
+      }
     ]
   ]
 
@@ -91,14 +161,24 @@ export default class App extends React.Component {
           <View style={styles.buttonsLine}>
             <CalcButtons buttons={this.buttons[0]} />
           </View>
-          <View style={styles.buttonsLine}></View>
-          <View style={styles.buttonsLine}></View>
+          <View style={styles.buttonsLine}>
+            <CalcButtons buttons={this.buttons[1]} />
+          </View>
+          <View style={styles.buttonsLine}>
+            <CalcButtons buttons={this.buttons[2]} />
+          </View>
           <View style={styles.lastButtonsLinesContainer}>
             <View style={styles.twoButtonsLines}>
-              <View style={styles.buttonsLine}></View>
-              <View style={styles.buttonsLine}></View>
+              <View style={styles.buttonsLine}>
+                <CalcButtons buttons={this.buttons[3]} />
+              </View>
+              <View style={styles.buttonsLine}>
+                <CalcButtons buttons={this.buttons[4]} />
+              </View>
             </View>
-            <View style={styles.enterButtonContainer}></View>
+            <View style={styles.enterButtonContainer}>
+              <CalcButtons buttons={this.buttons[5]} />
+            </View>
           </View>
         </View>
       </View>
