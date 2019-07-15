@@ -56,71 +56,71 @@ export default class App extends React.Component {
       },
       {
         label: "+",
-        b0c4de: () => {this.calcButton("+")}
+        btnEvent: () => {this.calcButton("+")}
       }
     ],
     [
       {
         label: "7",
-        btnEvent: () => {this.calcButton("7")}
+        btnEvent: () => {this.valueButton("7")}
       },
       {
         label: "8",
-        b0c4de: () => {this.calcButton("8")}
+        btnEvent: () => {this.valueButton("8")}
       },
       {
         label: "9",
-        b0c4de: () => {this.calcButton("9")}
+        btnEvent: () => {this.valueButton("9")}
       },
       {
         label: "-",
-        b0c4de: () => {this.calcButton("-")}
+        btnEvent: () => {this.calcButton("-")}
       }
     ],
     [
       {
         label: "4",
-        btnEvent: () => {this.calcButton("4")}
+        btnEvent: () => {this.valueButton("4")}
       },
       {
         label: "5",
-        b0c4de: () => {this.calcButton("5")}
+        btnEvent: () => {this.valueButton("5")}
       },
       {
         label: "6",
-        b0c4de: () => {this.calcButton("6")}
+        btnEvent: () => {this.valueButton("6")}
       },
       {
         label: "*",
-        b0c4de: () => {this.calcButton("*")}
+        btnEvent: () => {this.calcButton("*")}
       }
     ],
     [
       {
         label: "1",
-        btnEvent: () => {this.calcButton("1")}
+        btnEvent: () => {this.valueButton("1")}
       },
       {
         label: "2",
-        b0c4de: () => {this.calcButton("2")}
+        btnEvent: () => {this.valueButton("2")}
       },
       {
         label: "3",
-        b0c4de: () => {this.calcButton("3")}
+        btnEvent: () => {this.valueButton("3")}
       }
     ],
     [
       {
         label: "0",
-        btnEvent: () => {this.calcButton("0")}
+        btnEvent: () => {this.valueButton("0")}
       },
       {
         label: ".",
-        b0c4de: () => {this.calcButton(".")}
+        btnEvent: () => {this.valueButton(".")}
       },
       {
         label: "/",
-        b0c4de: () => {this.calcButton("/")}
+        btnEvent: () => {this.calcButton("/")}
       }
     ],
     [
@@ -131,20 +131,118 @@ export default class App extends React.Component {
     ]
   ]
 
+  constructor(props){
+    super(props)
+    this.state = {
+      results: [],
+      current: "0",
+      dotInputed: false,
+      afterValueButton: false
+    }
+  }
+
   valueButton = value => {
+    let current = this.state.current
+    let dotInputed = this.state.dotInputed
+    if(value == "."){
+      if(!dotInputed){
+        current += value
+        dotInputed = true
+      }
+    }else if(current == "0"){
+      current = value
+    } else {
+      current += value
+    }
 
+    this.setState({
+      current: current,
+      dotInputed: dotInputed,
+      afterValueButton: true
+    })
   }
+
   enterButton = () => {
+    let newValue = NaN
+    if (this.state.dotInputed) {
+      newValue = parseFloat(this.state.current)
+    } else {
+      newValue = parseInt(this.state.current)
+    }
 
+    if(isNaN(newValue)){
+      return
+    }
+
+    let results = this.state.results
+    results = [...results, newValue]
+    this.setState({
+      current: "0",
+      dotInputed: false,
+      results: results,
+      afterValueButton: false
+    })
   }
+
   calcButton = value => {
+    if (this.state.results.length < 2) {
+      return
+    }
+    if (this.state.afterValueButton == true) {
+      return
+    }
+    let newResults = this.state.results
+    const target2 = newResults.pop()
+    const target1 = newResults.pop()
+    let newValue = null
 
+    switch(value){
+      case "+":
+        newValue = target1 + target2
+        break
+      case "-":
+        newValue = target1 - target2
+        break
+      case "*":
+        newValue = target1 * target2
+        break
+      case "/":
+        newValue = target1 / target2
+        if (!isFinite(newValue)) {
+          newValue = null
+        }
+        break
+      default:
+        break
+    }
+    if(newValue == null){
+      return
+    }
+
+    newResults = [...newResults, newValue]
+    this.setState({
+      current: "0",
+      dotInputed: false,
+      results: newResults,
+      afterValueButton: false
+    })
   }
+
   acButton = () => {
-
+    this.setState({
+      current: "0",
+      dotInputed: false,
+      results: [],
+      afterValueButton: false
+    })
   }
-  cButton = () => {
 
+  cButton = () => {
+    this.setState({
+      current: "0",
+      dotInputed: false,
+      afterValueButton: false
+    })
   }
 
   render(){
@@ -153,8 +251,12 @@ export default class App extends React.Component {
         {/* 結果表示領域 */}
         <View style={styles.results}>
           <View style={styles.resultLine}></View>
-          <View style={styles.resultLine}></View>
-          <View style={styles.resultLine}></View>
+          <View style={styles.resultLine}>
+            <Text>{this.state.current}</Text>
+          </View>
+          <View style={styles.resultLine}>
+            <Text>{this.state.results.join(" ")}</Text>
+          </View>
         </View>
         {/* ボタン表示領域 */}
         <View style={styles.buttons}>
