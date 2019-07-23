@@ -5,7 +5,8 @@ import {
   View,
   Platform,
   StatusBar,
-  TouchableOpacity
+  TouchableOpacity,
+  Dimensions
 } from 'react-native';
 
 const { STATUSBAR_HIGHT } = Platform.OS == "ios" ? 20 : StatusBar.currentHeight;
@@ -133,12 +134,34 @@ export default class App extends React.Component {
 
   constructor(props){
     super(props)
+    const {height, width} = Dimensions.get('window')
     this.state = {
       results: [],
       current: "0",
       dotInputed: false,
-      afterValueButton: false
+      afterValueButton: false,
+      orientation: this.getOrientation(height, width)
     }
+  }
+
+  componentDidMount(){
+    Dimensions.addEventListener('change', this.changeOrientation)
+  }
+
+  componentWillMount(){
+    Dimensions.removeEventListener('change', this.changeOrientation)
+  }
+
+  getOrientation = (height, width) => {
+    if (height > width) {
+      return 'portrait'
+    }
+    return 'landscape'
+  }
+
+  changeOrientation = window => {
+    const orientation = this.getOrientation(window.height, window.width)
+    this.setState({orientation: orientation})
   }
 
   valueButton = value => {
@@ -246,10 +269,14 @@ export default class App extends React.Component {
   }
 
   render(){
+    let resultFlex = 3
+    if (this.state.orientation == 'landscape') {
+      resultFlex = 1
+    }
     return(
       <View style={styles.container}>
         {/* 結果表示領域 */}
-        <View style={styles.results}>
+        <View style={[styles.results, {flex: resultFlex}]}>
           <View style={styles.resultLine}></View>
           <View style={styles.resultLine}>
             <Text>{this.state.current}</Text>
